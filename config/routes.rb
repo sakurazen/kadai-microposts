@@ -6,13 +6,19 @@ Rails.application.routes.draw do
   delete 'logout', to: 'sessions#destroy'
 
   get 'signup', to: 'users#new'
+
   resources :users, only: [:index, :show, :new, :create] do
     member do
       get :followings
       get :followers
+      get :fav_microposts
     end
   end
   
-  resources :microposts, only: [:create, :destroy]
+  resources :microposts, only: [:create, :destroy] do
+    post 'likes', to: 'favorites#create'
+    delete 'likes', to: 'favorites#destroy'
+  end
   resources :relationships, only: [:create, :destroy]
+  resources :favorites, only: [:create, :destroy]
 end
